@@ -22,7 +22,6 @@ knitr::opts_chunk$set(echo = TRUE)
 * `DV_Code1`
 * `DV_Code2`
 
-
 # Data Visualization Modifications (to reduce size so that the app can load under 1 minute)
 
 * Run the data visualization part
@@ -99,3 +98,7 @@ dev.off()
 
 include_graphics("www/img/Grid2.png")
 ```
+
+# Other Notes
+
+* All `save()` function uses were set to `eval = FALSE`. Need to manually update files that were created using the `save()` function when needed.
