@@ -1981,6 +1981,9 @@ We have two data sets. The first one is called `PlantGrowth`, which is an R buil
 * Step 5: order the data from the lowest weight to highest
 
 ```{r DW_Exercise-setup}
+library(tidyverse)
+library(magrittr)
+
 PlantGrowth %<>% 
   mutate(ID = seq.int(1,30,by=1)) %>%
   relocate(ID, .before = weight) %>%
