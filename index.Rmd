@@ -38,8 +38,14 @@ function googleTranslateElementInit() {
 knitr::opts_chunk$set(include = TRUE, comment = NA, echo = TRUE,
                       message = FALSE, warning = FALSE, cache = FALSE,
                       fig.align = "center", out.width = '90%')
+library(here)
 library(knitr)
 library(learnr)
+library(wordcountaddin)
+library(magrittr)
+
+rmarkdown:::perf_timer_reset_all()
+rmarkdown:::perf_timer_start("render")
 ```
 
 
