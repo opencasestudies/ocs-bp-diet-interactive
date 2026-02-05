@@ -453,7 +453,7 @@ diet_data %>%
 
 OK, so that gives us an idea of what dietary factors we can explore, and we can see that there are 15 of them. 
 
-Let's see if the `location_name` values are the same between both CSV files. To do this we will use the `setequal()` function of `dplyr`.
+Let's see if the `location_name` values are the same between both CSV files. To do this we will use the `setequal()` function of `dplyr`. The `setequal()` function allows us to check if there's a difference between 2 tibbles. The `setequal()` function requires that column names match in order for it to check if there is a difference. 
 ```{r}
 dplyr::setequal(
   distinct(diet_data, location_name), 
@@ -1433,20 +1433,10 @@ all.equal(X, Y, ignore_row_order = FALSE)
 # Doesn't report rows being different order
 ```
 
-`setequal()` does not provide clues about what is different but TRUE (no differences) or FALSE (indicating at least one difference).
+`setequal()` does not provide clues about what is different but TRUE (no differences) or FALSE (indicating at least one difference). Remember that the `setequal()` function requires that column names match in order for it to check if there is a difference. 
 
 ```{r}
-# Reports false indicating at least one difference
-setequal(X, Y)
-```
-
-`setdiff()` tells us what is different and is dependent on the order of the objects compared, but prioritizes the values that are unique to each.
-
-```{r}
-# This reports what is unique to X
-setdiff(X, Y)
-# This reports what is unique to Y - nothing in this case
-setdiff(Y, X)
+setequal(X, Y) 
 ```
 
 Now let's make it so that only the order is different:
@@ -1462,18 +1452,6 @@ all_equal(X, Y, ignore_row_order = TRUE)
 all_equal(X, Y, ignore_row_order = FALSE) # reports diff order
 ```
 
-
-Remember `setequal()` ignores order and gives a value of TRUE for no differences.
-```{r}
-# It reports no difference!
-setequal(X, Y)
-```
-
-`setdiff()` also ignores order and shows no differences.
-```{r}
-setdiff(X, Y)
-```
-
 If we have different column/variable names this makes comparisons more challenging. Columns will be identified for having different names.
 ```{r}
 X <- tibble(colname1 = c("A", "B", "AC", "D"))
@@ -1487,18 +1465,6 @@ all_equal(X, Y, ignore_row_order = TRUE)
 all_equal(X, Y, ignore_row_order = FALSE)
 ```
 
-`setequal()` will report `TRUE` or `FALSE` to indicate either a difference in columns or rows
-
-```{r}
-setequal(X, Y)
-```
-
-`setdiff()` requires that column names be the same so this will cause an error:
-
-```{r, eval = FALSE}
-setdiff(X, Y) # This will not work
-```
-
 </details> 
 
 ***
@@ -1507,9 +1473,14 @@ OK, let's keep going with our data.
 
 How similar are the guidelines tibble and the observed consumption tibbles?
 
-```{r}
+```{r, eval = FALSE}
+
+# Note: setequal() requires the same column names to compare. 
+consumption <- distinct(diet_data, dietary_risk) %>% 
+  rename(food = dietary_risk)
+
 setequal(
-  distinct(diet_data, dietary_risk),
+  consumption, 
   select(guidelines, food)
 )
 ```
@@ -1520,7 +1491,7 @@ Let's use the `setdiff` function to get more information about what is different
 
 ```{r, eval = FALSE}
 setdiff(
-  distinct(diet_data, dietary_risk),
+  consumption,
   select(guidelines, food)
 )
 ```
@@ -1532,6 +1503,8 @@ We can use the `rename()` function from `dplyr` to do this. We list the value th
 
 ```{r}
 diet_data <- diet_data %>% 
+  dplyr::rename(food = dietary_risk)
+sep_age_diet_data <- sep_age_diet_data %>% 
   dplyr::rename(food = dietary_risk)
 ```
 
@@ -1560,7 +1533,7 @@ sep_age_diet_data <- sep_age_diet_data %>%
 ***
 <details> <summary> Click here to reveal the code </summary>
 
-```{r}
+```{r, eval=FALSE}
 sep_age_diet_data <- sep_age_diet_data %>% 
   dplyr::rename(food = dietary_risk)
 ```
@@ -1729,8 +1702,8 @@ guidelines
 # "optimal" variable
 guidelines <- guidelines %>% 
   mutate(optimal = if_else(condition = unit_optimal == "mg",
-    true = optimal / 1000,
-    false = optimal
+    true = as.numeric(optimal) / 1000,
+    false = as.numeric(optimal)
   ))
 ```
 
@@ -1738,15 +1711,15 @@ guidelines <- guidelines %>%
 # "optimal" variable
 guidelines <- guidelines %>% 
   mutate(optimal = if_else(condition = unit_optimal == "mg",
-    true = optimal / 1000,
-    false = optimal
+    true = as.numeric(optimal) / 1000,
+    false = as.numeric(optimal)
   ))
 
 # "upper_optimal" variable
 guidelines <- guidelines %>% 
   mutate(upper_optimal = if_else(condition = unit_optimal == "mg",
-    true = upper_optimal / 1000,
-    false = upper_optimal
+    true = as.numeric(upper_optimal) / 1000,
+    false = as.numeric(upper_optimal)
   ))
 ```
 
@@ -1754,15 +1727,15 @@ guidelines <- guidelines %>%
 # "optimal" variable
 guidelines <- guidelines %>% 
   mutate(optimal = if_else(condition = unit_optimal == "mg",
-    true = optimal / 1000,
-    false = optimal
+    true = as.numeric(optimal) / 1000,
+    false = as.numeric(optimal)
   ))
 
 # "upper_optimal" variable
 guidelines <- guidelines %>% 
   mutate(upper_optimal = if_else(condition = unit_optimal == "mg",
-    true = upper_optimal / 1000,
-    false = upper_optimal
+    true = as.numeric(upper_optimal) / 1000,
+    false = as.numeric(upper_optimal)
   ))
 
 # replace "mg" with "g" in the "unit_optimal" variable
@@ -1773,7 +1746,6 @@ guidelines <- guidelines %>%
   ))
 ```
 
-
 ***
 <details> <summary> Click here to reveal the code </summary>
 
@@ -1781,15 +1753,15 @@ guidelines <- guidelines %>%
 # "optimal" variable
 guidelines <- guidelines %>% 
   mutate(optimal = if_else(condition = unit_optimal == "mg",
-    true = optimal / 1000,
-    false = optimal
+    true = as.numeric(optimal) / 1000,
+    false = as.numeric(optimal)
   ))
 
 # "upper_optimal" variable
 guidelines <- guidelines %>% 
   mutate(upper_optimal = if_else(condition = unit_optimal == "mg",
-    true = upper_optimal / 1000,
-    false = upper_optimal
+    true = as.numeric(upper_optimal) / 1000,
+    false = as.numeric(upper_optimal)
   ))
 
 # replace "mg" with "g" in the "unit_optimal" variable
@@ -1815,8 +1787,8 @@ guidelines
 # Another possible way with dplyr::case_when():
 guidelines <- guidelines %>% 
   mutate(lower_optimal = case_when(
-    unit_optimal == "mg" ~ lower_optimal / 1000,
-    unit_optimal != "mg" ~ lower_optimal
+    unit_optimal == "mg" ~ as.numeric(lower_optimal) / 1000,
+    unit_optimal != "mg" ~ as.numeric(lower_optimal)
   ))
 
 # Or could use this:
