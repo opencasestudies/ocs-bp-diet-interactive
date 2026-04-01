@@ -237,7 +237,6 @@ See [this other case study](https://opencasestudies.github.io/ocs-bp-rural-and-u
 [skimr](https://cran.r-project.org/web/packages/skimr/index.html){target="_blank"}      | to get an overview of data   
 [pdftools](https://cran.r-project.org/web/packages/pdftools/pdftools.pdf){target="_blank"}   | to read a PDF into R   
 [stringr](https://stringr.tidyverse.org/articles/stringr.html){target="_blank"}    | to manipulate the text within the PDF of the data   
-[magrittr](https://magrittr.tidyverse.org/articles/magrittr.html){target="_blank"}   | to use the `%<>%` pipping operator  
 [purrr](https://purrr.tidyverse.org/){target="_blank"}      | to perform functions on all columns of a tibble   
 [tibble](https://tibble.tidyverse.org/){target="_blank"}     | to create data objects that we can manipulate with  dplyr/stringr/tidyr/purrr  
 [tidyr](https://tidyr.tidyverse.org/){target="_blank"}      | to separate data within a column into multiple columns 
